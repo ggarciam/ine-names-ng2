@@ -1,6 +1,6 @@
 /// <reference path="../../typings/index.d.ts"/>
 
-import {HelloComponent} from './hello';
+import {HelloComponent} from './dashboard';
 import {TestBed, async} from '@angular/core/testing';
 
 describe('hello component', () => {

@@ -3,7 +3,7 @@
 import {Component} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
-import {HelloComponent} from './hello';
+import {DashboardComponent} from './dashboard';
 import {NamesComponent} from './names';
 
 @Component({
@@ -15,7 +15,7 @@ export class RootComponent {}
 export const routes: Routes = [
   {
     path: '',
-    component: HelloComponent
+    component: DashboardComponent
   },
   {
     path: 'names',
