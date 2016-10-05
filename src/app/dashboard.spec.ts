@@ -1,22 +1,22 @@
 /// <reference path="../../typings/index.d.ts"/>
 
-import {HelloComponent} from './dashboard';
+import {DashboardComponent} from './dashboard';
 import {TestBed, async} from '@angular/core/testing';
 
-describe('hello component', () => {
+describe('dashboard component', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        HelloComponent
+        DashboardComponent
       ]
     });
     TestBed.compileComponents();
   }));
 
   it('should render hello world', () => {
-    const fixture = TestBed.createComponent(HelloComponent);
+    const fixture = TestBed.createComponent(DashboardComponent);
     fixture.detectChanges();
-    const hello = fixture.nativeElement;
-    expect(hello.querySelector('h1').textContent).toBe('Hello World!');
+    const dashboard = fixture.nativeElement;
+    expect(dashboard.querySelector('h1').textContent).toBe('Hello World!');
   });
 });
