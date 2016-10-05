@@ -3,6 +3,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {routing, RootComponent} from './routes';
 
 import {HelloComponent} from './hello';
+import {NamesComponent} from './names';
 
 @NgModule({
   imports: [
@@ -11,7 +12,8 @@ import {HelloComponent} from './hello';
   ],
   declarations: [
     RootComponent,
-    HelloComponent
+    HelloComponent,
+    NamesComponent
   ],
   bootstrap: [RootComponent]
 })
