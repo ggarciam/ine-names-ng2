@@ -144,6 +144,7 @@ export class NamesService {
   private extractData(res: Response) {
     let body = res.json();
     // console.log(body);
+    if(!body.query.results) {return null;}
     return body.query.results.a || { };
   }
 
