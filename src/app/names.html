@@ -1,1 +1,46 @@
-<h1>{{ hello }}</h1>
+<h1>Names</h1>
+<div layout="row">
+  <form>
+    {{selectedObject}}
+    <div layout-gt-sm="row">
+      <div layout-gt-sm="column" layout-padding>
+        <select class="form-control" id="name" required
+        [(ngModel)]="selectedObject" name="content">
+          <option *ngFor="let n of localNames" [value]="n.content">{{n.content}}</option>
+        </select>
+      </div>
+      <div layout-gt-sm="column">
+        <md-radio-group [(ngModel)]="selectedGenre" name="genre">
+          <md-radio-button *ngFor="let g of genres" [value]="g.value">
+            {{g.title}}
+          </md-radio-button>
+        </md-radio-group>
+      </div>
+    </div>
+    <div layout-gt-sm="row" layout-padding>
+      <button md-button
+        (click)="getValues($event)">
+        <!--ng-disabled="rc.buttonInvalid">-->
+        Buscar
+      </button>
+      <!--<md-progress-circular md-mode="{{rc.mode}}"></md-progress-circular>-->
+    </div>
+    <div class="values" *ngFor="let value of values" >
+      <div class="half">
+        <div class="row">
+          <span>{{value.title}}</span>
+        </div>
+        <div class="row">
+          <div layout="row">
+            <span>{{value.total}}</span>
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <span>{{value.percentage}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

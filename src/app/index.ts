@@ -4,23 +4,31 @@ import {NgModule}               from '@angular/core';
 import {BrowserModule}          from '@angular/platform-browser';
 import {routing, RootComponent} from './routes';
 import {MaterialModule}         from '@angular/material';
+import {HttpModule}             from '@angular/http';
+import {FormsModule}            from '@angular/forms';
 
 
-import {DashboardComponent} from './dashboard';
-import {NamesComponent} from './names';
+import {DashboardComponent}     from './dashboard';
+import {NamesComponent}         from './names';
+import {NamesService}           from './names.service';
 
 @NgModule({
   imports: [
     BrowserModule,
     routing,
-    MaterialModule.forRoot()
+    HttpModule,
+    MaterialModule.forRoot(),
+    FormsModule
   ],
   declarations: [
     RootComponent,
     DashboardComponent,
     NamesComponent
   ],
-  providers: [MaterialModule],
+  providers: [
+    MaterialModule,
+    NamesService
+  ],
   bootstrap: [RootComponent]
 })
 export class AppModule {}
