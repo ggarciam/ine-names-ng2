@@ -42,7 +42,17 @@ export class NamesService {
     Observable.forkJoin(arrayOfObservables)
       .subscribe(
         data => {
-          let mergedData = [].concat.apply([], data);
+          let mergedData;
+          let dataAux = [];
+
+          //avoiding empty data when having problems from Wikipedia
+          data.forEach(d => {
+            if(d) {
+              dataAux.push(d);
+            }
+          });
+
+          mergedData = [].concat.apply([], dataAux);
           this.dataStore.names = mergedData;
           this.names.next(this.dataStore.names);
         }
@@ -100,7 +110,7 @@ export class NamesService {
             case 'Provincia':
               dataAux.title = cell.content;
               break;
-            case 'Total':
+            case 'total':
               dataAux.total = cell.content;
               break;
             case 'porcentaje':
@@ -138,6 +148,7 @@ export class NamesService {
   private extractInfo(res: Response) {
     let body = res.json();
     // console.log(body);
+    if(!body.query.results) {return null;}
     return body.query.results.tr || { };
   }
 

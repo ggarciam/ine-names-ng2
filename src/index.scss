@@ -1,3 +1,116 @@
+@import '~@angular/material/core/theming/all-theme';
+
+// NOTE: Theming is currently experimental and not yet publically released!
+
+@include md-core();
+
+$primary: md-palette($md-blue);
+$accent:  md-palette($md-blue, A200, A100, A400);
+
+$theme: md-light-theme($primary, $accent);
+
+@include angular-material-theme($theme);
+
+$base-padding: 1rem;
+
+@mixin col {
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin row {
+  display: flex;
+  flex-direction: row;
+}
+
 body {
-  background-color: lightgrey;
+  //background-color: md-color($md-blue, 50);
+  background-color: $white-87-opacity;
+  font-family: $md-font-family;
+
+  ine-app, ine-names {
+    @include col;
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  form {
+    margin-bottom: $base-padding*2;
+  }
+
+  .col {
+    @include col;
+  }
+
+  .row {
+    @include row;
+  }
+
+  .elements {
+    > div {
+      padding: $base-padding/2 0;
+    }
+
+    .select {
+      select, div {
+        display: inline-block;
+        vertical-align: middle;
+      }
+    }
+  }
+
+  .button {
+    button {
+      margin-right: $base-padding/2;
+    }
+  }
+
+  .spinner {
+
+    &.spinner-names{
+      md-spinner, md-progress-circle {
+        width: 1rem !important;
+        height: 1rem !important;
+      }
+    }
+    &.spinner-values{
+      md-spinner, md-progress-circle {
+        width: 2rem !important;
+        height: 2rem !important;
+      }
+    }
+  }
+
+  .results {
+    .values {
+      padding: $base-padding/2 0;
+
+      &:first-child {
+        font-weight: 600;
+      }
+      .half {
+        width: 50%;
+
+        .third {
+          width: 33%;
+        }
+      }
+    }
+  }
+}
+
+md-spinner, md-progress-circle {
+  path {
+    stroke-width: 5px !important;
+  }
+}
+
+md-radio-group {
+  md-radio-button {
+    padding: 0 $base-padding;
+
+    &:first-child {
+      padding-left: 0;
+    }
+  }
 }

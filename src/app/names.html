@@ -1,46 +1,60 @@
 <h1>Names</h1>
-<div layout="row">
-  <form>
-    {{selectedObject}}
-    <div layout-gt-sm="row">
-      <div layout-gt-sm="column" layout-padding>
+<div class="column">
+  <form class="column">
+    <div class="column elements">
+      <div class="column select">
         <select class="form-control" id="name" required
-        [(ngModel)]="selectedObject" name="content">
+        [(ngModel)]="selectedObject" name="name">
           <option *ngFor="let n of localNames" [value]="n.content">{{n.content}}</option>
         </select>
+        <div class="spinner spinner-names" *ngIf="spinnerNames">
+          <md-progress-circle mode="indeterminate"></md-progress-circle>
+          <!--<md-spinner md-mode="indeterminate"></md-spinner>-->
+        </div>
       </div>
-      <div layout-gt-sm="column">
+      <div class="row radio">
         <md-radio-group [(ngModel)]="selectedGenre" name="genre">
-          <md-radio-button *ngFor="let g of genres" [value]="g.value">
+          <md-radio-button *ngFor="let g of genres"
+                           [value]="g.value"
+                           [disabled]="selectedObject===''">
             {{g.title}}
           </md-radio-button>
         </md-radio-group>
       </div>
     </div>
-    <div layout-gt-sm="row" layout-padding>
-      <button md-button
-        (click)="getValues($event)">
-        <!--ng-disabled="rc.buttonInvalid">-->
+    <div class="row button">
+      <button md-button color="primary" md-raised-button
+              (click)="getValues()"
+              [disabled]="selectedObject===''">
         Buscar
       </button>
-      <!--<md-progress-circular md-mode="{{rc.mode}}"></md-progress-circular>-->
+      <div class="spinner spinner-values" *ngIf="spinnerValues">
+        <md-progress-circle mode="indeterminate"></md-progress-circle>
+        <!--<md-spinner md-mode="indeterminate"></md-spinner>-->
+      </div>
     </div>
-    <div class="values" *ngFor="let value of values" >
-      <div class="half">
-        <div class="row">
+  </form>
+
+  <div class="results column" *ngIf="values">
+    <div class="values row" *ngFor="let value of values" >
+      <div class="half row">
+        <div class="row third">
           <span>{{value.title}}</span>
         </div>
-        <div class="row">
+        <div class="row third">
           <div layout="row">
             <span>{{value.total}}</span>
           </div>
         </div>
-        <div class="row">
+        <div class="row third">
           <div>
             <span>{{value.percentage}}</span>
           </div>
         </div>
       </div>
     </div>
-  </form>
+  </div>
+  <div class="no-results" *ngIf="!values || values.length === 0">
+    <span>No se encontraron resultados</span>
+  </div>
 </div>
