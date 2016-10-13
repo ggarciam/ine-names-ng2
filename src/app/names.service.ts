@@ -1,8 +1,8 @@
-import {Injectable}     from '@angular/core';
-import {Http, Response} from '@angular/http';
+import {Injectable}       from '@angular/core';
+import {Http, Response}   from '@angular/http';
 
-import {Observable}     from 'rxjs/Observable';
-import {Subject}        from 'rxjs';
+import {Observable}       from 'rxjs/Observable';
+import {Subject}          from 'rxjs';
 
 @Injectable()
 export class NamesService {
@@ -12,6 +12,7 @@ export class NamesService {
     names: Name[],
     values: Value[]
   };
+  private provinces: Province[];
 
   constructor(
     private http: Http
@@ -19,6 +20,7 @@ export class NamesService {
     this.dataStore = {names: [], values: []};
     this.names = <Subject<Name[]>>new Subject();
     this.values = <Subject<Value[]>>new Subject();
+    this.provinces = PROVINCES;
   }
   getLocalNames(): Name[] {
     return this.dataStore.names;
@@ -45,9 +47,9 @@ export class NamesService {
           let mergedData;
           let dataAux = [];
 
-          //avoiding empty data when having problems from Wikipedia
+          // avoiding empty data when having problems from Wikipedia
           data.forEach(d => {
-            if(d) {
+            if (d) {
               dataAux.push(d);
             }
           });
@@ -94,6 +96,17 @@ export class NamesService {
     });
   }
 
+  getProvinceId(name): string {
+    let id: string = '';
+
+    this.provinces.forEach(p => {
+      if (p.title === name) {
+        id =  p.id;
+      }
+    });
+    return id;
+  }
+
   transformData(data): Value[] {
     let dataFinal: Value[];
 
@@ -101,10 +114,11 @@ export class NamesService {
       let dataAux: Value = {
         title: '',
         total: 0,
-        percentage: 0
+        percentage: 0,
+        id: ''
       };
 
-      if(!d.class) {
+      if (!d.class) {
         d.th.forEach(cell => {
           switch (cell.id) {
             case 'Provincia':
@@ -119,17 +133,18 @@ export class NamesService {
         });
       } else {
         dataAux.title = d.th.content.trim();
+        dataAux.id = this.getProvinceId(dataAux.title);
         d.td.forEach(cell => {
-          if(cell.headers.match(/total/)) {
+          if (cell.headers.match(/total/)) {
             dataAux.total = parseInt(cell.content.trim());
           } else {
-            dataAux.percentage = parseFloat(cell.content.trim().replace(',','.'));
+            dataAux.percentage = parseFloat(cell.content.trim().replace(',', '.'));
           }
         });
       }
 
       return dataAux;
-    })
+    });
 
     return dataFinal;
   }
@@ -148,14 +163,14 @@ export class NamesService {
   private extractInfo(res: Response) {
     let body = res.json();
     // console.log(body);
-    if(!body.query.results) {return null;}
-    return body.query.results.tr || { };
+    if (!body.query.results) { return null; }
+    return body.query.results.tr || {};
   }
 
   private extractData(res: Response) {
     let body = res.json();
     // console.log(body);
-    if(!body.query.results) {return null;}
+    if (!body.query.results) { return null; }
     return body.query.results.a || { };
   }
 
@@ -188,9 +203,231 @@ export interface Value {
   title: string;
   total: number;
   percentage: number;
+  id: string;
+}
+
+export interface Province {
+  id: string;
+  title: string;
+}
+
+export interface Area {
+  id: string;
+  value: number;
 }
 
 export const GENRES: Genre[] = [
   { value: 1, title: 'Hombre' },
   { value: 6, title: 'Mujer' }
+];
+
+export const PROVINCES: Province[] = [
+  {
+    'id': 'ES-A',
+    'title': 'Alicante/Alacant',
+  },
+  {
+    'id': 'ES-AB',
+    'title': 'Albacete',
+  },
+  {
+    'id': 'ES-AL',
+    'title': 'Almería',
+  },
+  {
+    'id': 'ES-AV',
+    'title': 'Ávila',
+  },
+  {
+    'id': 'ES-B',
+    'title': 'Barcelona',
+  },
+  {
+    'id': 'ES-BA',
+    'title': 'Badajoz',
+  },
+  {
+    'id': 'ES-BI',
+    'title': 'Bizkaia',
+  },
+  {
+    'id': 'ES-BU',
+    'title': 'Burgos',
+  },
+  {
+    'id': 'ES-C',
+    'title': 'Coruña, A',
+  },
+  {
+    'id': 'ES-CA',
+    'title': 'Cádiz',
+  },
+  {
+    'id': 'ES-CC',
+    'title': 'Cáceres',
+  },
+  {
+    'id': 'ES-CE',
+    'title': 'Ceuta',
+  },
+  {
+    'id': 'ES-CO',
+    'title': 'Córdoba',
+  },
+  {
+    'id': 'ES-CR',
+    'title': 'Ciudad Real',
+  },
+  {
+    'id': 'ES-CS',
+    'title': 'Castellón/Castelló',
+  },
+  {
+    'id': 'ES-CU',
+    'title': 'Cuenca',
+  },
+  {
+    'id': 'ES-GC',
+    'title': 'Palmas, Las',
+  },
+  {
+    'id': 'ES-GI',
+    'title': 'Girona',
+  },
+  {
+    'id': 'ES-GR',
+    'title': 'Granada',
+  },
+  {
+    'id': 'ES-GU',
+    'title': 'Guadalajara',
+  },
+  {
+    'id': 'ES-H',
+    'title': 'Huelva',
+  },
+  {
+    'id': 'ES-HU',
+    'title': 'Huesca',
+  },
+  {
+    'id': 'ES-J',
+    'title': 'Jaén',
+  },
+  {
+    'id': 'ES-L',
+    'title': 'Lleida',
+  },
+  {
+    'id': 'ES-LE',
+    'title': 'León',
+  },
+  {
+    'id': 'ES-LO',
+    'title': 'Rioja, La',
+  },
+  {
+    'id': 'ES-LU',
+    'title': 'Lugo',
+  },
+  {
+    'id': 'ES-M',
+    'title': 'Madrid',
+  },
+  {
+    'id': 'ES-MA',
+    'title': 'Málaga',
+  },
+  {
+    'id': 'ES-ML',
+    'title': 'Melilla',
+  },
+  {
+    'id': 'ES-MU',
+    'title': 'Murcia',
+  },
+  {
+    'id': 'ES-NA',
+    'title': 'Navarra',
+  },
+  {
+    'id': 'ES-O',
+    'title': 'Asturias',
+  },
+  {
+    'id': 'ES-OR',
+    'title': 'Ourense',
+  },
+  {
+    'id': 'ES-P',
+    'title': 'Palencia',
+  },
+  {
+    'id': 'ES-PM',
+    'title': 'Balears, Illes',
+  },
+  {
+    'id': 'ES-PO',
+    'title': 'Pontevedra',
+  },
+  {
+    'id': 'ES-S',
+    'title': 'Cantabria',
+  },
+  {
+    'id': 'ES-SA',
+    'title': 'Salamanca',
+  },
+  {
+    'id': 'ES-SE',
+    'title': 'Sevilla',
+  },
+  {
+    'id': 'ES-SG',
+    'title': 'Segovia',
+  },
+  {
+    'id': 'ES-SO',
+    'title': 'Soria',
+  },
+  {
+    'id': 'ES-SS',
+    'title': 'Gipuzkoa',
+  },
+  {
+    'id': 'ES-TE',
+    'title': 'Teruel',
+  },
+  {
+    'id': 'ES-TF',
+    'title': 'Santa Cruz de Tenerife',
+  },
+  {
+    'id': 'ES-TO',
+    'title': 'Toledo',
+  },
+  {
+    'id': 'ES-T',
+    'title': 'Tarragona',
+  },
+  {
+    'id': 'ES-V',
+    'title': 'Valencia/València',
+  },
+  {
+    'id': 'ES-VA',
+    'title': 'Valladolid',
+  },
+  {
+    'id': 'ES-VI',
+    'title': 'Araba/Álava',
+  },
+  {
+    'id': 'ES-Z',
+    'title': 'Zaragoza',
+  },
+  {
+    'id': 'ES-ZA',
+    'title': 'Zamora',
+  }
 ];

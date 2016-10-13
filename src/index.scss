@@ -81,6 +81,15 @@ body {
     }
   }
 
+  .half {
+    width: 49%;
+  }
+
+  .results, .map {
+    display: inline-block;
+    vertical-align: top;
+  }
+
   .results {
     .values {
       padding: $base-padding/2 0;
@@ -88,14 +97,14 @@ body {
       &:first-child {
         font-weight: 600;
       }
-      .half {
-        width: 50%;
-
-        .third {
-          width: 33%;
-        }
+      .third {
+        width: 33%;
       }
     }
+  }
+
+  .map[hidden] {
+    display: none;
   }
 }
 

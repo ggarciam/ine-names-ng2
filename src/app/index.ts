@@ -23,11 +23,12 @@ import {NamesService}           from './names.service';
   declarations: [
     RootComponent,
     DashboardComponent,
-    NamesComponent
+    NamesComponent,
   ],
   providers: [
     MaterialModule,
-    NamesService
+    NamesService,
+    {provide: 'Window', useValue: window}
   ],
   bootstrap: [RootComponent]
 })

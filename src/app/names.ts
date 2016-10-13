@@ -1,7 +1,9 @@
-import {Component}                  from '@angular/core';
-import {OnInit}                     from '@angular/core';
-import {Name, Genre, NamesService, GENRES, Value}  from './names.service';
-import {Observable}                 from 'rxjs';
+import {Component, ElementRef, Inject}              from '@angular/core';
+import {OnInit}                                     from '@angular/core';
+import {Name, Genre, NamesService, GENRES, Value, Area}   from './names.service';
+import {Observable}                                 from 'rxjs';
+
+declare var AmCharts: any;
 
 @Component({
   selector: 'ine-names',
@@ -16,11 +18,13 @@ export class NamesComponent implements OnInit {
   public values: Value[];
   public spinnerNames: boolean;
   public spinnerValues: boolean;
-
   private name: string;
+  private AmCharts: any;
 
   constructor(
     private namesService: NamesService,
+    private elementRef:ElementRef,
+    @Inject('Window') private _window: Window
   ) {
     this.selectedObject = '';
     this.genres = GENRES;
@@ -43,10 +47,14 @@ export class NamesComponent implements OnInit {
 
     this.namesService.setNames();
 
+    this.AmCharts = AmCharts;
+
   }
 
   getValues(): void {
     let url: string;
+    let areas: Area[];
+    let AmCharts: any;
 
     this.spinnerValues = true;
     this.name = this.selectedObject;
@@ -60,13 +68,56 @@ export class NamesComponent implements OnInit {
 
     this.namesService.getInfo()
       .subscribe(() => {
+
         this.values = this.namesService.getLocalData();
         console.log(this.values);
         this.spinnerValues = false;
+
+        let areas: Area[];
+
+        areas = this.values.map(v => {
+          let areaAux: Area = {
+            id: '',
+            value: 0
+          };
+          areaAux.id = v.id;
+          areaAux.value = Number(v.total);
+          if (areaAux.id !== '') { return areaAux; }
+        });
+
+        //remove two first empty values
+        areas.shift();
+        areas.shift();
+
+        var map;
+
+        AmCharts = this.AmCharts;
+
+
+          map = new AmCharts.AmMap();
+
+
+          map.colorSteps = 10;
+
+          var dataProvider = {
+            mapVar: AmCharts.maps.spainProvincesLow,
+
+            areas: areas
+          };
+
+          map.areasSettings = {
+            autoZoom: true
+          };
+          map.dataProvider = dataProvider;
+
+          var valueLegend = new AmCharts.ValueLegend();
+          valueLegend.right = 10;
+          valueLegend.minValue = "little";
+          valueLegend.maxValue = "a lot!";
+          map.valueLegend = valueLegend;
+
+          map.write("mapdiv");
+
       });
-
-
   }
-
-
 }
