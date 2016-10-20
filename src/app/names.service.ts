@@ -32,33 +32,36 @@ export class NamesService {
 
   setNames(): void {
     let urls: string[] = this.getUrls();
-    let arrayOfObservables = [];
 
     urls.forEach(u => {
-      let query = this.http.get(u)
-        .map(this.extractData)
-        .catch(this.handleError);
-      arrayOfObservables.push(query);
+      this.http.get(u)
+           .map(this.extractData)
+           .catch(this.handleError)
+        .subscribe(
+          data => {
+            data.forEach(name => {
+              this.dataStore.names.push(name);
+              this.dataStore.names = this.orderArray(this.dataStore.names);
+              this.names.next(this.dataStore.names);
+            })
+          }
+        );
     });
 
-    Observable.forkJoin(arrayOfObservables)
-      .subscribe(
-        data => {
-          let mergedData;
-          let dataAux = [];
+    localStorage.setItem('hola', 'hola');
+  }
 
-          // avoiding empty data when having problems from Wikipedia
-          data.forEach(d => {
-            if (d) {
-              dataAux.push(d);
-            }
-          });
-
-          mergedData = [].concat.apply([], dataAux);
-          this.dataStore.names = mergedData;
-          this.names.next(this.dataStore.names);
-        }
-      );
+  orderArray(array: Name[]): Name[] {
+    array.sort((a: any, b: any) => {
+      if (a.content < b.content) {
+        return -1;
+      } else if (a.content > b.content) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+    return array;
   }
 
   getLocalData(): Value[] {
@@ -136,9 +139,9 @@ export class NamesService {
         dataAux.id = this.getProvinceId(dataAux.title);
         d.td.forEach(cell => {
           if (cell.headers.match(/total/)) {
-            dataAux.total = parseInt(cell.content.trim());
+            dataAux.total = parseInt(cell.content.trim().replace('.',''));
           } else {
-            dataAux.percentage = parseFloat(cell.content.trim().replace(',', '.'));
+            dataAux.percentage = parseFloat(cell.content.trim().replace(',','.'));
           }
         });
       }
@@ -213,7 +216,7 @@ export interface Province {
 
 export interface Area {
   id: string;
-  value: number;
+  value: string;
 }
 
 export const GENRES: Genre[] = [

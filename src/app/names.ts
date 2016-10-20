@@ -73,15 +73,19 @@ export class NamesComponent implements OnInit {
         console.log(this.values);
         this.spinnerValues = false;
 
-        let areas: Area[];
+        let areas: Area[],
+            values: Number[],
+            minValue: Number,
+            maxValue: Number;
+
 
         areas = this.values.map(v => {
           let areaAux: Area = {
             id: '',
-            value: 0
+            value: ''
           };
           areaAux.id = v.id;
-          areaAux.value = Number(v.total);
+          areaAux.value = v.total.toString();
           if (areaAux.id !== '') { return areaAux; }
         });
 
@@ -89,34 +93,37 @@ export class NamesComponent implements OnInit {
         areas.shift();
         areas.shift();
 
+        values = areas.map(a => {
+          return parseInt(a.value);
+        });
+        minValue = Math.min.apply(Math, values);
+        maxValue = Math.max.apply(Math, values);
+
         var map;
 
         AmCharts = this.AmCharts;
 
+        map = new AmCharts.AmMap();
 
-          map = new AmCharts.AmMap();
+        map.colorSteps = 10;
 
+        var dataProvider = {
+          mapVar: AmCharts.maps.spainProvincesLow,
+          areas: areas
+        };
 
-          map.colorSteps = 10;
+        map.areasSettings = {
+          autoZoom: true
+        };
+        map.dataProvider = dataProvider;
 
-          var dataProvider = {
-            mapVar: AmCharts.maps.spainProvincesLow,
+        var valueLegend = new AmCharts.ValueLegend();
+        valueLegend.right = 10;
+        valueLegend.minValue = minValue;
+        valueLegend.maxValue = maxValue;
+        map.valueLegend = valueLegend;
 
-            areas: areas
-          };
-
-          map.areasSettings = {
-            autoZoom: true
-          };
-          map.dataProvider = dataProvider;
-
-          var valueLegend = new AmCharts.ValueLegend();
-          valueLegend.right = 10;
-          valueLegend.minValue = "little";
-          valueLegend.maxValue = "a lot!";
-          map.valueLegend = valueLegend;
-
-          map.write("mapdiv");
+        map.write("mapdiv");
 
       });
   }

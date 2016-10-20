@@ -38,7 +38,7 @@
   <div class="results half column" *ngIf="values">
     <div class="values row" *ngFor="let value of values">
       <div class="row third">
-        <span>{{value.title}} ({{value.id}})</span>
+        <span>{{value.title}}</span>
       </div>
       <div class="row third">
         <div layout="row">
@@ -51,11 +51,12 @@
         </div>
       </div>
     </div>
+    <div class="no-results" *ngIf="!values || values.length === 0">
+      <span>No se encontraron resultados</span>
+    </div>
   </div>
   <div class="map half row" [hidden]="!values">
     <div id="mapdiv" style="width: 100%; background-color:#EEEEEE; height: 500px;"></div>
   </div>
-  <div class="no-results" *ngIf="!values || values.length === 0">
-    <span>No se encontraron resultados</span>
-  </div>
+
 </div>
