@@ -105,7 +105,7 @@ export class NamesComponent implements OnInit {
 
         map = new AmCharts.AmMap();
 
-        map.colorSteps = 10;
+        map.colorSteps = 52;
 
         var dataProvider = {
           mapVar: AmCharts.maps.spainProvincesLow,
@@ -113,7 +113,10 @@ export class NamesComponent implements OnInit {
         };
 
         map.areasSettings = {
-          autoZoom: true
+          autoZoom: true,
+          balloonText: '[[title]] <br/> [[value]]',
+          color: '#bbdefb',
+          colorSolid: '#0d47a1'
         };
         map.dataProvider = dataProvider;
 
@@ -124,7 +127,6 @@ export class NamesComponent implements OnInit {
         map.valueLegend = valueLegend;
 
         map.write("mapdiv");
-
       });
   }
 }
