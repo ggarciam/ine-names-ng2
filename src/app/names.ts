@@ -116,6 +116,7 @@ export class NamesComponent implements OnInit {
         map = new AmCharts.AmMap();
 
         map.colorSteps = 52;
+        map.dragMap = false;
 
         var dataProvider = {
           mapVar: AmCharts.maps.spainProvincesLow,
