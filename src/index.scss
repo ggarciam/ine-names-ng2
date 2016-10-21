@@ -106,6 +106,10 @@ body {
   .map[hidden] {
     display: none;
   }
+
+  #mapdiv{
+    background-color: #bbdefb !important;
+  }
 }
 
 md-spinner, md-progress-circle {

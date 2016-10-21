@@ -75,8 +75,14 @@ export class NamesComponent implements OnInit {
 
         let areas: Area[],
             values: Number[],
-            minValue: Number,
-            maxValue: Number;
+            minValue: Area= {
+              id: 'min',
+              value: ''
+            },
+            maxValue: Area= {
+              id: 'max',
+              value: ''
+            };
 
 
         areas = this.values.map(v => {
@@ -96,8 +102,12 @@ export class NamesComponent implements OnInit {
         values = areas.map(a => {
           return parseInt(a.value);
         });
-        minValue = Math.min.apply(Math, values);
-        maxValue = Math.max.apply(Math, values);
+
+        minValue.value = Math.min.apply(Math, values);
+        maxValue.value = Math.max.apply(Math, values);
+
+        areas.push(minValue);
+        areas.push(maxValue);
 
         var map;
 
@@ -115,15 +125,15 @@ export class NamesComponent implements OnInit {
         map.areasSettings = {
           autoZoom: true,
           balloonText: '[[title]] <br/> [[value]]',
-          color: '#bbdefb',
-          colorSolid: '#0d47a1'
+          color: '#ffd54f',
+          colorSolid: '#ff6f00'
         };
         map.dataProvider = dataProvider;
 
         var valueLegend = new AmCharts.ValueLegend();
         valueLegend.right = 10;
-        valueLegend.minValue = minValue;
-        valueLegend.maxValue = maxValue;
+        valueLegend.minValue = minValue.value;
+        valueLegend.maxValue = maxValue.value;
         map.valueLegend = valueLegend;
 
         map.write("mapdiv");
